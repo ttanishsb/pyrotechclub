@@ -33,11 +33,13 @@ export const metadata: Metadata = {
     siteName: 'PYROTECH',
     locale: 'en_IN',
     type: 'website',
+    images: [{ url: '/og.png', width: 1200, height: 630, alt: 'PYROTECH' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'PYROTECH | We make things happen',
     description: 'Student technology collective and home of Ordin@trix, Delhi.',
+    images: ['/og.png'],
   },
   // After adding your site in Google Search Console, paste the verification code here (or set the env var).
   verification: { google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION || undefined },
@@ -52,6 +54,7 @@ const JSON_LD = {
       name: 'PYROTECH',
       alternateName: ['Pyrotech Tagore International School', 'Pyrotech Student Technology Collective'],
       url: SITE_URL,
+      logo: `${SITE_URL}/og.png`,
       email: 'pyrotech@tagoreint.com',
       parentOrganization: {
         '@type': 'EducationalOrganization',
