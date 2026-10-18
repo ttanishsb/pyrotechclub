@@ -2037,3 +2037,17 @@ canvas {
     padding-top: calc(var(--header-h) + 24px);
   }
 }
+/* ── Members page: centre the President/VP cards + tighten the gap below ── */
+.m-grid--core {
+  margin-inline: auto; /* centres the two cards */
+}
+
+/* the section holding the President/VP cards: small bottom padding */
+.m-section:has(.m-grid--core) {
+  padding-bottom: clamp(20px, 2.5vw, 40px);
+}
+
+/* the section right after it (filters + member grid): small top padding */
+.m-section + .m-section {
+  padding-top: clamp(20px, 2.5vw, 40px);
+}
