@@ -1,0 +1,475 @@
+/* ---------- Wrapper ---------- */
+.staggered-menu-wrapper {
+  --sm-fg: #f2f4f7;
+  --sm-hair: rgba(242, 244, 246, 0.16);
+  --sm-glass: rgba(0, 0, 0, 0.42);
+  --sm-panel-w: clamp(320px, 40vw, 540px);
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 40;
+  pointer-events: none;
+}
+
+.staggered-menu-wrapper[data-tone='light'] {
+  --sm-fg: #000;
+  --sm-hair: rgba(0, 0, 0, 0.16);
+  --sm-glass: rgba(242, 244, 246, 0.6);
+}
+
+.staggered-menu-wrapper.fixed-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  z-index: 40;
+  overflow: hidden;
+}
+
+/* ---------- Header ---------- */
+.staggered-menu-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 18px var(--gutter, 4.2vw);
+  background: var(--sm-glass);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
+  border-bottom: 1px solid var(--sm-hair);
+  color: var(--sm-fg);
+  pointer-events: none;
+  z-index: 20;
+  transition:
+    background-color 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    color 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.staggered-menu-header > * {
+  pointer-events: auto;
+}
+
+/* While open the header turns transparent so it never tints the light panel. */
+.staggered-menu-wrapper[data-open] .staggered-menu-header {
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border-bottom-color: transparent;
+  /* Clear the glass quickly so it never tints the incoming light panel. */
+  transition-duration: 0.2s;
+}
+
+.sm-logo {
+  display: flex;
+  align-items: center;
+  user-select: none;
+  color: inherit;
+}
+
+.sm-logo-img {
+  display: block;
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+}
+
+.sm-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  color: inherit;
+  opacity: 0.7;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* ---------- Toggle ---------- */
+.sm-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #f2f4f7;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  line-height: 1;
+  padding: 10px 0;
+  overflow: visible;
+}
+
+.sm-toggle:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 6px;
+  border-radius: 4px;
+}
+
+.sm-toggle-textWrap {
+  position: relative;
+  display: inline-block;
+  height: 1em;
+  overflow: hidden;
+  white-space: nowrap;
+  width: var(--sm-toggle-width, auto);
+  min-width: var(--sm-toggle-width, auto);
+}
+
+.sm-toggle-textInner {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.sm-toggle-line {
+  display: block;
+  height: 1em;
+  line-height: 1;
+}
+
+.sm-icon {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  will-change: transform;
+}
+
+.sm-icon-line {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100%;
+  height: 2px;
+  background: currentColor;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+}
+
+/* ---------- Panel + sweep layers ---------- */
+.staggered-menu-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: var(--sm-panel-w);
+  height: 100%;
+  background: #f2f4f7;
+  display: flex;
+  flex-direction: column;
+  padding: 7.5em 2.2em 2em 2.2em;
+  overflow-y: auto;
+  z-index: 10;
+  pointer-events: auto;
+  opacity: 0;
+}
+
+[data-position='left'] .staggered-menu-panel {
+  right: auto;
+  left: 0;
+}
+
+.sm-prelayers {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: var(--sm-panel-w);
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0;
+}
+
+[data-position='left'] .sm-prelayers {
+  right: auto;
+  left: 0;
+}
+
+.sm-prelayer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  transform: translateX(0);
+  opacity: 0;
+}
+
+.sm-panel-inner {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* ---------- Nav items ---------- */
+.sm-panel-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.sm-panel-itemWrap {
+  position: relative;
+  overflow: hidden;
+  line-height: 1;
+  padding-top: 0.04em;
+}
+
+.sm-panel-item {
+  position: relative;
+  color: #000;
+  font-family: var(--font-display, sans-serif);
+  font-weight: 900;
+  font-stretch: 112%;
+  font-size: clamp(2.6rem, 4.4vw, 3.8rem);
+  cursor: pointer;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  transition: color 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-block;
+  text-decoration: none;
+  padding-right: 1.4em;
+}
+
+.sm-panel-item:hover,
+.sm-panel-item:focus-visible {
+  color: var(--sm-accent, #168bff);
+}
+
+.sm-panel-itemLabel {
+  display: inline-block;
+  will-change: transform;
+  transform-origin: 50% 100%;
+}
+
+.sm-panel-list[data-numbering] {
+  counter-reset: smItem;
+}
+
+.sm-panel-list[data-numbering] .sm-panel-item::after {
+  counter-increment: smItem;
+  content: counter(smItem, decimal-leading-zero);
+  position: absolute;
+  top: 0.15em;
+  right: 0;
+  font-family: var(--font-mono, monospace);
+  font-size: 13px;
+  font-weight: 400;
+  font-stretch: 100%;
+  color: var(--sm-accent, #168bff);
+  letter-spacing: 0.04em;
+  pointer-events: none;
+  user-select: none;
+  opacity: var(--sm-num-opacity, 0);
+}
+
+/* ---------- Socials: logo rows ---------- */
+.sm-socials {
+  margin-top: auto;
+  padding-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.sm-socials-title {
+  margin: 0;
+  font-family: var(--font-mono, monospace);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.sm-socials-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sm-socials-item {
+  border-top: 1px solid rgba(0, 0, 0, 0.14);
+}
+
+.sm-socials-item:last-child {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+}
+
+.sm-socials-link {
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 14px 0;
+  background: transparent;
+  border: 0;
+  text-align: left;
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+  opacity: 1;
+  transition:
+    color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sm-social-icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.9);
+  transition:
+    background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sm-social-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.sm-social-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.sm-social-name {
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.sm-social-handle {
+  font-family: var(--font-display, sans-serif);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sm-social-action {
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.55);
+  display: inline-flex;
+  align-items: center;
+}
+
+.sm-social-arrow {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sm-socials-link:hover .sm-social-arrow,
+.sm-socials-link:focus-visible .sm-social-arrow {
+  transform: translate(3px, -3px);
+}
+
+.sm-socials-link:hover .sm-social-icon,
+.sm-socials-link:focus-visible .sm-social-icon {
+  background: var(--sm-accent, #168bff);
+  border-color: var(--sm-accent, #168bff);
+  color: #fff;
+}
+
+.sm-socials-link:focus-visible {
+  outline: 2px solid var(--sm-accent, #168bff);
+  outline-offset: 2px;
+}
+
+/* Dim the siblings of the row being hovered. */
+.sm-socials-list:hover .sm-socials-link:not(:hover),
+.sm-socials-list:focus-within .sm-socials-link:not(:focus-visible) {
+  opacity: 0.38;
+}
+
+.sm-note {
+  margin: 0;
+  padding-top: 1.1rem;
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1024px) {
+  .staggered-menu-panel {
+    width: 100%;
+    left: 0;
+    right: 0;
+  }
+
+  .sm-prelayers {
+    width: 100%;
+  }
+
+  /* Full-width light panel: header chrome has to go dark while it is open. */
+  .staggered-menu-wrapper[data-open] .sm-logo,
+  .staggered-menu-wrapper[data-open] .sm-center {
+    color: #000;
+  }
+}
+
+@media (max-width: 640px) {
+  .staggered-menu-header {
+    padding: 14px var(--gutter, 4.2vw);
+  }
+
+  .sm-panel-item {
+    font-size: clamp(2.6rem, 11.5vw, 3.6rem);
+  }
+
+  .staggered-menu-panel {
+    padding-top: 6em;
+  }
+}
+
+@media (max-width: 860px) {
+  .sm-center {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .staggered-menu-header,
+  .sm-socials-link,
+  .sm-social-icon {
+    transition: none;
+  }
+}
