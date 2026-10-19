@@ -38,8 +38,8 @@ export const coreTeam: Member[] = [
 
 /** Everyone else. */
 export const members: Member[] = [
-  { name: 'Shaurya Singh', title: 'Programming Head', discipline: 'Programming', image: '/members/shaurya.jpg' },
-  { name: 'Tanish Singh Bisht', title: 'Programmer', discipline: 'Programming', image: '/members/tanish.jpg' },
+  { name: 'Shaurya Singh', title: 'Programming Head/Web Developer', discipline: 'Programming', image: '/members/shaurya.jpg' },
+  { name: 'Tanish Singh Bisht', title: 'Web Developer/Programmer', discipline: 'Programming', image: '/members/tanish.jpg' },
   { name: 'AR Nadal', title: 'Programmer', discipline: 'Programming', image: '/members/nadal.jpg' },
   { name: 'Viraaj Bhardwaj', title: 'Gaming Head', discipline: 'Gaming', image: '/members/viraaj.jpg' },
   { name: 'Yana Pawar', title: 'Movie Making Head', discipline: 'Media', image: '/members/yana.jpg' },
